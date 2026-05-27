@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transaction-service
+  namespace: swiftpay
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: transaction-service
+  template:
+    metadata:
+      labels:
+        app: transaction-service
+    spec:
+      containers:
+        - name: transaction-service
+          image: swiftpay/transaction-service:1.0.0
+          ports:
+            - containerPort: 8081
+          envFrom:
+            - configMapRef:
+                name: swiftpay-config
+          env:
+            - name: DB_NAME
+              value: swiftpay_transactions
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: swiftpay-secrets
+                  key: db-password
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8081
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8081
+            initialDelaySeconds: 60
+            periodSeconds: 15
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transaction-service
+  namespace: swiftpay
+spec:
+  selector:
+    app: transaction-service
+  ports:
+    - port: 80
+      targetPort: 8081

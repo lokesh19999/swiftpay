@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ledger-service
+  namespace: swiftpay
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ledger-service
+  template:
+    metadata:
+      labels:
+        app: ledger-service
+    spec:
+      containers:
+        - name: ledger-service
+          image: swiftpay/ledger-service:1.0.0
+          ports:
+            - containerPort: 8082
+          envFrom:
+            - configMapRef:
+                name: swiftpay-config
+          env:
+            - name: DB_NAME
+              value: swiftpay_ledger
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: swiftpay-secrets
+                  key: db-password
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8082
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ledger-service
+  namespace: swiftpay
+spec:
+  selector:
+    app: ledger-service
+  ports:
+    - port: 80
+      targetPort: 8082
