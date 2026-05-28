@@ -1,0 +1,92 @@
+﻿{
+    "openapi":  "3.0.1",
+    "info":  {
+                 "title":  "OpenAPI definition",
+                 "version":  "v0"
+             },
+    "servers":  [
+                    {
+                        "url":  "http://localhost:8083",
+                        "description":  "Generated server url"
+                    }
+                ],
+    "tags":  [
+                 {
+                     "name":  "Analytics",
+                     "description":  "Payment metrics read API"
+                 }
+             ],
+    "paths":  {
+                  "/v1/metrics/payments":  {
+                                               "get":  {
+                                                           "tags":  [
+                                                                        "Analytics"
+                                                                    ],
+                                                           "summary":  "List recent completed payment metrics",
+                                                           "operationId":  "recentPayments",
+                                                           "parameters":  [
+                                                                              {
+                                                                                  "name":  "limit",
+                                                                                  "in":  "query",
+                                                                                  "required":  false,
+                                                                                  "schema":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "format":  "int32",
+                                                                                                 "default":  50
+                                                                                             }
+                                                                              }
+                                                                          ],
+                                                           "responses":  {
+                                                                             "200":  {
+                                                                                         "description":  "OK",
+                                                                                         "content":  {
+                                                                                                         "*/*":  {
+                                                                                                                     "schema":  {
+                                                                                                                                    "type":  "array",
+                                                                                                                                    "items":  {
+                                                                                                                                                  "$ref":  "#/components/schemas/PaymentMetric"
+                                                                                                                                              }
+                                                                                                                                }
+                                                                                                                 }
+                                                                                                     }
+                                                                                     }
+                                                                         }
+                                                       }
+                                           }
+              },
+    "components":  {
+                       "schemas":  {
+                                       "PaymentMetric":  {
+                                                             "type":  "object",
+                                                             "properties":  {
+                                                                                "id":  {
+                                                                                           "type":  "string",
+                                                                                           "format":  "uuid"
+                                                                                       },
+                                                                                "transactionId":  {
+                                                                                                      "type":  "string",
+                                                                                                      "format":  "uuid"
+                                                                                                  },
+                                                                                "senderAccountId":  {
+                                                                                                        "type":  "string",
+                                                                                                        "format":  "uuid"
+                                                                                                    },
+                                                                                "receiverAccountId":  {
+                                                                                                          "type":  "string",
+                                                                                                          "format":  "uuid"
+                                                                                                      },
+                                                                                "amount":  {
+                                                                                               "type":  "number"
+                                                                                           },
+                                                                                "currency":  {
+                                                                                                 "type":  "string"
+                                                                                             },
+                                                                                "processedAt":  {
+                                                                                                    "type":  "string",
+                                                                                                    "format":  "date-time"
+                                                                                                }
+                                                                            }
+                                                         }
+                                   }
+                   }
+}

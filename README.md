@@ -117,6 +117,27 @@ curl http://localhost:8083/v1/metrics/payments?limit=20
 - Ledger: http://localhost:8082/swagger-ui.html
 - Analytics: http://localhost:8083/swagger-ui.html
 
+### Export Swagger/OpenAPI document files
+
+The hackathon requires Swagger/OpenAPI documentation. Each service exposes OpenAPI JSON at:
+
+- `http://localhost:8081/api-docs`
+- `http://localhost:8082/api-docs`
+- `http://localhost:8083/api-docs`
+
+To export them into files (make sure services are running):
+
+```powershell
+docker compose up -d
+powershell -ExecutionPolicy Bypass -File .\scripts\export-openapi.ps1
+```
+
+This generates:
+
+- `docs/openapi/transaction-service-openapi.json`
+- `docs/openapi/ledger-service-openapi.json`
+- `docs/openapi/analytics-service-openapi.json`
+
 ## Local development (without Docker for apps)
 
 ```bash

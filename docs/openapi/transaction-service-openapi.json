@@ -1,0 +1,176 @@
+﻿{
+    "openapi":  "3.0.1",
+    "info":  {
+                 "title":  "SwiftPay Transaction Service API",
+                 "description":  "Payment initiation and status API",
+                 "contact":  {
+                                 "name":  "SwiftPay Platform",
+                                 "email":  "platform@swiftpay.io"
+                             },
+                 "version":  "v1"
+             },
+    "servers":  [
+                    {
+                        "url":  "http://localhost:8081",
+                        "description":  "Generated server url"
+                    }
+                ],
+    "tags":  [
+                 {
+                     "name":  "Payments",
+                     "description":  "Payment initiation and status"
+                 }
+             ],
+    "paths":  {
+                  "/v1/payments":  {
+                                       "post":  {
+                                                    "tags":  [
+                                                                 "Payments"
+                                                             ],
+                                                    "summary":  "Initiate a payment",
+                                                    "description":  "Creates a PENDING transaction and publishes PaymentInitiated event",
+                                                    "operationId":  "createPayment",
+                                                    "requestBody":  {
+                                                                        "content":  {
+                                                                                        "application/json":  {
+                                                                                                                 "schema":  {
+                                                                                                                                "$ref":  "#/components/schemas/PaymentRequestDto"
+                                                                                                                            }
+                                                                                                             }
+                                                                                    },
+                                                                        "required":  true
+                                                                    },
+                                                    "responses":  {
+                                                                      "200":  {
+                                                                                  "description":  "OK",
+                                                                                  "content":  {
+                                                                                                  "*/*":  {
+                                                                                                              "schema":  {
+                                                                                                                             "$ref":  "#/components/schemas/PaymentResponseDto"
+                                                                                                                         }
+                                                                                                          }
+                                                                                              }
+                                                                              }
+                                                                  }
+                                                }
+                                   },
+                  "/v1/payments/{transactionId}":  {
+                                                       "get":  {
+                                                                   "tags":  [
+                                                                                "Payments"
+                                                                            ],
+                                                                   "summary":  "Get payment status by transaction ID",
+                                                                   "operationId":  "getPayment",
+                                                                   "parameters":  [
+                                                                                      {
+                                                                                          "name":  "transactionId",
+                                                                                          "in":  "path",
+                                                                                          "required":  true,
+                                                                                          "schema":  {
+                                                                                                         "type":  "string",
+                                                                                                         "format":  "uuid"
+                                                                                                     }
+                                                                                      }
+                                                                                  ],
+                                                                   "responses":  {
+                                                                                     "200":  {
+                                                                                                 "description":  "OK",
+                                                                                                 "content":  {
+                                                                                                                 "*/*":  {
+                                                                                                                             "schema":  {
+                                                                                                                                            "$ref":  "#/components/schemas/PaymentResponseDto"
+                                                                                                                                        }
+                                                                                                                         }
+                                                                                                             }
+                                                                                             }
+                                                                                 }
+                                                               }
+                                                   }
+              },
+    "components":  {
+                       "schemas":  {
+                                       "PaymentRequestDto":  {
+                                                                 "required":  [
+                                                                                  "amount",
+                                                                                  "currency",
+                                                                                  "idempotencyKey",
+                                                                                  "receiverAccountId",
+                                                                                  "senderAccountId"
+                                                                              ],
+                                                                 "type":  "object",
+                                                                 "properties":  {
+                                                                                    "idempotencyKey":  {
+                                                                                                           "type":  "string",
+                                                                                                           "description":  "Client-supplied idempotency key (UUID)",
+                                                                                                           "format":  "uuid",
+                                                                                                           "example":  "550e8400-e29b-41d4-a716-446655440000"
+                                                                                                       },
+                                                                                    "senderAccountId":  {
+                                                                                                            "type":  "string",
+                                                                                                            "description":  "Sender account UUID",
+                                                                                                            "format":  "uuid"
+                                                                                                        },
+                                                                                    "receiverAccountId":  {
+                                                                                                              "type":  "string",
+                                                                                                              "description":  "Receiver account UUID",
+                                                                                                              "format":  "uuid"
+                                                                                                          },
+                                                                                    "amount":  {
+                                                                                                   "minimum":  0.01,
+                                                                                                   "exclusiveMinimum":  false,
+                                                                                                   "type":  "number",
+                                                                                                   "example":  100.5
+                                                                                               },
+                                                                                    "currency":  {
+                                                                                                     "maxLength":  3,
+                                                                                                     "minLength":  3,
+                                                                                                     "pattern":  "[A-Z]{3}",
+                                                                                                     "type":  "string",
+                                                                                                     "example":  "USD"
+                                                                                                 }
+                                                                                },
+                                                                 "description":  "Payment initiation request"
+                                                             },
+                                       "PaymentResponseDto":  {
+                                                                  "type":  "object",
+                                                                  "properties":  {
+                                                                                     "transactionId":  {
+                                                                                                           "type":  "string",
+                                                                                                           "format":  "uuid"
+                                                                                                       },
+                                                                                     "idempotencyKey":  {
+                                                                                                            "type":  "string",
+                                                                                                            "format":  "uuid"
+                                                                                                        },
+                                                                                     "senderAccountId":  {
+                                                                                                             "type":  "string",
+                                                                                                             "format":  "uuid"
+                                                                                                         },
+                                                                                     "receiverAccountId":  {
+                                                                                                               "type":  "string",
+                                                                                                               "format":  "uuid"
+                                                                                                           },
+                                                                                     "amount":  {
+                                                                                                    "type":  "number"
+                                                                                                },
+                                                                                     "currency":  {
+                                                                                                      "type":  "string"
+                                                                                                  },
+                                                                                     "status":  {
+                                                                                                    "type":  "string",
+                                                                                                    "enum":  [
+                                                                                                                 "PENDING",
+                                                                                                                 "COMPLETED",
+                                                                                                                 "FAILED"
+                                                                                                             ]
+                                                                                                },
+                                                                                     "createdAt":  {
+                                                                                                       "type":  "string",
+                                                                                                       "format":  "date-time"
+                                                                                                   }
+                                                                                 },
+                                                                  "description":  "Payment initiation response"
+                                                              }
+                                   }
+                   }
+}
