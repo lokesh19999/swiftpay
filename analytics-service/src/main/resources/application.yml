@@ -5,9 +5,9 @@ spring:
   application:
     name: analytics-service
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:swiftpay_analytics}
-    username: ${DB_USER:swiftuser}
-    password: ${DB_PASSWORD:swiftpassword}
+    url: jdbc:postgresql://${DB_HOST:postgres}:${DB_PORT:5432}/${DB_NAME:postgres}?currentSchema=${DB_SCHEMA:swiftpay}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
   jpa:
     open-in-view: false
     hibernate:

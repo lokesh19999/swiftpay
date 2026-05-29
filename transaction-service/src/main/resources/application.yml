@@ -5,9 +5,10 @@ spring:
   application:
     name: transaction-service
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:swiftpay_transactions}
-    username: ${DB_USER:swiftuser}
-    password: ${DB_PASSWORD:swiftpassword}
+    url: jdbc:postgresql://${DB_HOST:postgres}:${DB_PORT:5432}/${DB_NAME:postgres}?currentSchema=${DB_SCHEMA:swiftpay}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+
     hikari:
       maximum-pool-size: 20
       minimum-idle: 5
