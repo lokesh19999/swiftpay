@@ -5,3 +5,15 @@ CREATE DATABASE swiftpay_analytics;
 GRANT ALL PRIVILEGES ON DATABASE swiftpay_transactions TO swiftuser;
 GRANT ALL PRIVILEGES ON DATABASE swiftpay_ledger TO swiftuser;
 GRANT ALL PRIVILEGES ON DATABASE swiftpay_analytics TO swiftuser;
+
+\c swiftpay_transactions
+CREATE SCHEMA IF NOT EXISTS swiftpay;
+GRANT ALL ON SCHEMA swiftpay TO swiftuser;
+
+\c swiftpay_ledger
+CREATE SCHEMA IF NOT EXISTS swiftpay;
+GRANT ALL ON SCHEMA swiftpay TO swiftuser;
+
+\c swiftpay_analytics
+CREATE SCHEMA IF NOT EXISTS swiftpay;
+GRANT ALL ON SCHEMA swiftpay TO swiftuser;

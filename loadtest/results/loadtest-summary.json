@@ -1,0 +1,15 @@
+{
+  "testRun": "smoke-250tps-60s",
+  "date": "2026-05-29",
+  "targetTps": 250,
+  "targetRequests": 15000,
+  "durationSec": 60,
+  "achievedHttpReqs": 9457,
+  "achievedReqPerSec": 150.63,
+  "droppedIterations": 5543,
+  "httpReqFailedRate": 0,
+  "checksSucceededPct": 100,
+  "p95LatencyMs": 9780,
+  "p99LatencyMs": 12580,
+  "notes": "Smoke run via k6 Docker. Target 250 iter/s; maxVUs capped at 1000 with high latency (~6s avg). Full 1M run configured in k6/load-test-1m.js (4000s at 250 TPS). PCAP: loadtest/results/swiftpay-payment-load.pcap"
+}
